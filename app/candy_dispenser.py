@@ -65,7 +65,10 @@ class CandyDispenser:
 		self.is_empty_button = tk.Button(button_frame, text="isEmpty", command=self.is_empty)
 		self.is_empty_button.pack(side=tk.LEFT, padx=5)
 
-		self.top_button = tk.Button(button_frame, text="Top", command=self.top)
+		self.is_full_button = tk.Button(button_frame, text="isFull", command=self.is_full)
+		self.is_full_button.pack(side=tk.LEFT, padx=5)
+
+		self.top_button = tk.Button(button_frame, text="Check Top", command=self.top)
 		self.top_button.pack(side=tk.LEFT, padx=5)
 
 		self.show_candies_button = tk.Button(button_frame, text="Show no. of candies", command=self.show_candies)
@@ -176,7 +179,7 @@ class CandyDispenser:
 
 	def push(self):
 		if len(self.candies) >= self.max_candies:
-			messagebox.showwarning("WARNING", "The dispenser is full")
+			messagebox.showwarning("WARNING", "The dispenser is full. Cannot add candy")
 			return
 
 		current_colors = set(self.candies)
@@ -199,9 +202,15 @@ class CandyDispenser:
 
 	def is_empty(self):
 		if not self.candies:
-			messagebox.showwarning("Is it empty", "Yes, the dispenser is empty")
+			messagebox.showwarning("Is it empty?", "Yes, the dispenser is empty")
 		else:
-			messagebox.showwarning("Is it empty", "No, the dispenser is not empty")
+			messagebox.showwarning("Is it empty?", "No, the dispenser is not empty")
+
+	def is_full(self):
+		if len(self.candies) == 7:
+			messagebox.showwarning("Is it full?", "Yes, the dispenser is full")
+		else:
+			messagebox.showwarning("Is it full?", "No, the dispenser is not full")
 
 	def top(self):
 		if self.candies:
@@ -216,6 +225,7 @@ class CandyDispenser:
 			messagebox.showwarning("No. of candies", f"There is {number_of_candies} candy in the dispenser")
 		else:
 			messagebox.showwarning("No. of candies", f"There are {number_of_candies} candies in the dispenser")
+
 
 if __name__ == "__main__":
 	root = tk.Tk()

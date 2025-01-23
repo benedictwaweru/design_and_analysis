@@ -51,6 +51,9 @@ class HospitalQueue:
 			return self.queue[0][2]
 		
 		return None
+	
+	def clear_all(self):
+		self.queue = []
 
 
 
@@ -68,7 +71,7 @@ class Hospital(customtkinter.CTk):
 		self.setup_ui()
 
 	def setup_ui(self):
-		customtkinter.CTkLabel(self, text="Reception", font=("Arial", 20)).pack(pady=10)
+		customtkinter.CTkLabel(self, text="Hospital Reception", font=("Arial", 20)).pack(pady=10)
 
 
 		customtkinter.CTkLabel(self, text="Add Patient").place(x=85, y=80)
@@ -105,6 +108,7 @@ class Hospital(customtkinter.CTk):
 
 
 		customtkinter.CTkButton(self, text="Queue Length", command=self.get_length).place(x=600, y=230)
+		customtkinter.CTkButton(self, text="Clear All", command=self.clear_all_queue).place(x=600, y=270)
 
 
 		customtkinter.CTkLabel(self, text="Patient Queue").place(x=80, y=300)
@@ -122,6 +126,18 @@ class Hospital(customtkinter.CTk):
 		self.patient_queue.add_patient(name, int(age))
 		self.update_visual_queue()
 		self.clear_entries()
+
+	def clear_all_queue(self):
+		"""Clears the entire patient queue."""
+		if not self.patient_queue.is_empty():
+			confirm = messagebox.askyesno("Confirm", "Are you sure you want to clear the entire queue?")
+			if confirm:
+				self.patient_queue.clear_all()
+				self.update_visual_queue()
+				messagebox.showinfo("Success", "All patients have been removed from the queue.")
+		else:
+				messagebox.showinfo("Queue Empty", "The queue is already empty.")
+
 
 	def update_patient_details(self):
 		name = self.update_name_entry.get()
@@ -172,6 +188,8 @@ class Hospital(customtkinter.CTk):
 		patient = self.patient_queue.admit_patient()
 		if patient:
 			messagebox.showinfo("Admitted Patient", f"Admitted: {patient['name']}, Age: {patient['age']}")
+			self.patient_queue.remove(patient['name'])
+			self.update_visual_queue()
 		else:
 			messagebox.showinfo("Queue empty", "No patients in the queue")
 
